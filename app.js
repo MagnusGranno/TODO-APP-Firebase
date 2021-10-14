@@ -27,8 +27,12 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore();
 
-window.onload = readFromDB();
+window.onload = windowLoaded();
 
+function windowLoaded() {
+  readFromDB();
+  showTaskLeft();
+}
 const form = document.getElementById('form');
 
 // State of viewing
@@ -61,6 +65,7 @@ async function readFromDB() {
   });
   state = 0;
   generateTodos(todos);
+  showTaskLeft();
 }
 
 function generateTodos(todos) {
@@ -156,6 +161,7 @@ async function showActive() {
   });
   state = 1;
   generateTodos(activeTodos);
+  showTaskLeft();
 }
 
 async function showCompleted() {
@@ -173,6 +179,7 @@ async function showCompleted() {
   });
   state = 2;
   generateTodos(completedTodos);
+  showTaskLeft();
 }
 
 const clearCompleted = document.getElementById('clear_completed');
@@ -194,8 +201,28 @@ clearCompleted.addEventListener('click', () => {
       showCompleted();
       break;
   }
+  showTaskLeft();
 });
 
-function deleteCompleted() {}
+async function showTaskLeft() {
+  let activeTasks = 0;
+  const qu = query(
+    collection(db, 'todo-items'),
+    where('status', '==', 'active')
+  );
+  const todoDocs = await getDocs(qu);
+  todoDocs.forEach((doc) => activeTasks++);
+
+  let completedTasks = 0;
+  const quq = query(
+    collection(db, 'todo-items'),
+    where('status', '==', 'completed')
+  );
+  const todoDocsCom = await getDocs(quq);
+  todoDocsCom.forEach((doc) => completedTasks++);
+
+  const taskLeft = document.getElementById('tasksLeft');
+  taskLeft.textContent = `${activeTasks} active | ${completedTasks} completed`;
+}
 
 //TODO: 1. fix items left in the bottom left corner 2. make responsive 3. change themes
