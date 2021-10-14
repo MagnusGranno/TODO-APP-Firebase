@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./app.js"></script>
+    <title>Magnus Granno | To Do App</title>
+</head>
+
+<body>
+    <div class="banner_container">
+        <img class="banner_image" src="./Images/planet.jpg" alt="Banner image">
+    </div>
+    <div class="container">
+        <div class="header">
+
+            <div class="title">
+                TODO
+            </div>
+
+            <div class="theme">
+                <img src="./Images/icon-sun.svg" alt="">
+            </div>
+
+        </div>
+        <div class="new_todo">
+            <div class="check">
+                <div class="check_mark">
+
+                </div>
+            </div>
+            <div class="todo_input">
+                <form id="form">
+                    <input id="input_text" type="text" placeholder="Create a new task..." autocomplete="off">
+                </form>
+            </div>
+        </div>
+        <div class="todo_items_wrapper">
+            <div class="todo_items">
+                <div class="todo_item">
+                    <div class="check">
+                        <div class="check_mark">
+                            <img src="./Images/icon-check.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="todo_text">
+                        Walk the dog
+                    </div>
+                </div>
+                <div class="todo_item">
+                    <div class="check">
+                        <div class="check_mark">
+                            <img src="./Images/icon-check.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="todo_text">
+                        Walk the dog
+                    </div>
+                </div>
+                <div class="todo_item">
+                    <div class="check">
+                        <div class="check_mark">
+                            <img src="./Images/icon-check.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="todo_text">
+                        Walk the dog
+                    </div>
+                </div>
+            </div>
+            <div class="todo_footer">
+                <div class="items_left">
+                    5 items left
+                </div>
+                <div class="items_to_show">
+                    <span class="toggle toggled" id="all">All</span>
+                    <span class="toggle" id="active">Active</span>
+                    <span class="toggle" id="completed">Completed</span>
+                </div>
+                <div class="clear_completed_items">
+                    <span id="clear_completed">Clear Completed Tasks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

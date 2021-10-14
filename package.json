@@ -1,0 +1,20 @@
+{
+  "name": "TodoApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "start": "webpack-dev-server --open --port 3456 --mode development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^9.1.2",
+    "firebase-admin": "^9.12.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.0"
+  }
+}
