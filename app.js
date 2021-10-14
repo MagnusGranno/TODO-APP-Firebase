@@ -38,6 +38,9 @@ const form = document.getElementById('form');
 // State of viewing
 let state = 0;
 
+//State of theme
+let theme = true;
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   let text = document.getElementById('input_text');
@@ -71,7 +74,8 @@ async function readFromDB() {
 function generateTodos(todos) {
   let todosHTML = '';
   todos.forEach((todo) => {
-    todosHTML += `
+    if (todo.status === 'active') {
+      todosHTML += `
     <div class="todo_item">
       <div class="check">
         <div data-id="${todo.id}" id="${todo.id}"class="check_mark ${todo.status}">
@@ -81,13 +85,32 @@ function generateTodos(todos) {
       <div class="todo_text ${todo.status}">
         ${todo.text}
       </div>
+      <div class="edit_btn" id="${todo.id}">Edit</div>
     </div>
     
     `;
+    } else {
+      todosHTML += `
+      <div class="todo_item">
+        <div class="check">
+          <div data-id="${todo.id}" id="${todo.id}"class="check_mark ${todo.status}">
+              <img src="./Images/icon-check.svg" alt="">
+          </div>
+        </div>
+        <div class="todo_text ${todo.status}">
+          ${todo.text}
+        </div>
+      </div>
+      
+      `;
+    }
   });
   document.querySelector('.todo_items').innerHTML = todosHTML;
   createEventListeners();
+  const editButtons = document.querySelectorAll('.edit_btn');
+  buttonListeners(editButtons);
 }
+
 function createEventListeners() {
   let checkMarks = document.querySelectorAll('.todo_item .check_mark');
   checkMarks.forEach((checkMark) => {
@@ -222,7 +245,52 @@ async function showTaskLeft() {
   todoDocsCom.forEach((doc) => completedTasks++);
 
   const taskLeft = document.getElementById('tasksLeft');
-  taskLeft.textContent = `${activeTasks} active | ${completedTasks} completed`;
+  taskLeft.textContent = `${activeTasks} Active | ${completedTasks} Completed`;
 }
 
-//TODO: 1. fix items left in the bottom left corner 2. make responsive 3. change themes
+const setThemeButton = document.getElementById('set_theme');
+setThemeButton.addEventListener('click', () => {
+  const r = document.querySelector(':root');
+  if (theme) {
+    r.style.setProperty('--background-color', 'hsl(0, 0%, 98%)');
+    r.style.setProperty('--text-color', 'hsl(235, 21%, 11%)');
+    theme = false;
+  } else {
+    r.style.setProperty('--background-color', 'hsl(235, 24%, 19%)');
+    r.style.setProperty('--text-color', 'hsl(234, 39%, 85%)');
+    theme = true;
+  }
+});
+
+const doneBtn = document.querySelector('.done');
+
+function buttonListeners(buttons) {
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.modal_bg').style.visibility = 'visible';
+
+      console.log('trying here man');
+
+      let idForDone = btn.id;
+      doneClicked(doneBtn, idForDone);
+    });
+  });
+}
+
+async function doneClicked(button, id) {
+  button.addEventListener('click', async () => {
+    document.querySelector('.modal_bg').style.visibility = 'hidden';
+    let textEdit = document.getElementById('modal_input').value;
+    if (textEdit === '') {
+      textEdit = 'task...';
+    }
+
+    const updateRef = doc(db, 'todo-items', id);
+    await updateDoc(updateRef, {
+      text: textEdit,
+    });
+    readFromDB();
+  });
+}
+
+//TODO: 2. make responsive: fix click on screen to close modal
